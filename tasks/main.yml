@@ -1,24 +1,27 @@
 ---
-- name: add user
+- name: create a group
+  group:
+    name: "{{ usergroup.group.name }}"
+    gid: "{{ usergroup.group.gid }}"
+
+- name: add user that join to a group
   user: 
-    name: "{{ item.key }}"
-    uid: "{{ item.value.uid }}"
+    name: "{{ usergroup.user.name }}"
+    uid: "{{ usergroup.user.uid }}"
+    group: "{{ usergroup.group.name  }}"
     state: present
-  with_dict: "{{ users }}"
 
 - name: register pub key
   authorized_key: 
-    user: "{{ item.key }}"
-    key: "{{ lookup('file', item.value.pubkey ) }}"
+    user: "{{ usergroup.user.name }}"
+    key: "{{ lookup('file', usergroup.user.pubkey ) }}"
     state: present
-  with_dict: "{{ users }}"
 
 - name: assign sudo to user
   template:
-    src: "{{ item.value.priv  }}_sudoers.j2"
-    dest: "/etc/sudoers.d/{{ item.key }}"
+    src: "{{ usergroup.user.priv  }}_sudoers.j2"
+    dest: "/etc/sudoers.d/{{ usergroup.user.name }}"
     owner: root
     group: root
     mode: 0400
     backup: yes
-  with_dict: "{{ users }}"

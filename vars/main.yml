@@ -1,7 +1,11 @@
 ---
-users:
- ansible:
-   detail: "ansible user with Administrator role"
-   uid: "1001"
-   priv: admin
-   pubkey: "{{ inventory_dir }}/roles/create-ansible-user/files/.ssh/id_rsa.pub"
+usergroup:
+  user:
+    name: ansible
+    detail: "ansible user with Administrator role"
+    uid: "5001"
+    priv: admin
+    pubkey: "id_rsa.pub"
+  group:
+    name: ansible
+    gid: "5001"

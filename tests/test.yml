@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
-  remote_user: root
+  connection: local
+  remote_user: infra-admin
+  become: true
   roles:
-    - create-ansible-user_
+    - { role: ../.. }
